@@ -1,5 +1,5 @@
-name: resuable_iap
-description: Headless Flutter in-app purchase service built on top of in_app_purchase.
+name: reusable_iap
+description: Headless Flutter in-app purchase service for catalog loading, purchases, restores, entitlements, and verification.
 version: 0.1.0
 
 environment:

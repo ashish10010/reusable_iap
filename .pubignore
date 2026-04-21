@@ -1,0 +1,12 @@
+.appdata/
+.dart_tool/
+.flutter-plugins-dependencies
+.git/
+.idea/
+build/
+coverage/
+example/.dart_tool/
+example/build/
+example/pubspec.lock
+pubspec.lock
+resuable_iap.iml

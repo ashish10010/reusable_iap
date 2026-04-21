@@ -1,6 +1,7 @@
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:resuable_iap/src/billing_gateway.dart';
-import 'package:resuable_iap/src/iap_models.dart';
+
+import 'billing_gateway.dart';
+import 'iap_models.dart';
 
 /// Default [BillingGateway] backed by Flutter's `in_app_purchase` plugin.
 class FlutterBillingGateway implements BillingGateway {

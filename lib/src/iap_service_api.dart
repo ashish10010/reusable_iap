@@ -1,5 +1,5 @@
-import 'package:resuable_iap/src/iap_models.dart';
-import 'package:resuable_iap/src/iap_state.dart';
+import 'iap_models.dart';
+import 'iap_state.dart';
 
 /// Public headless API for the reusable IAP service.
 abstract interface class IapServiceApi {

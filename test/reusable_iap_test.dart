@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:resuable_iap/resuable_iap.dart';
+import 'package:reusable_iap/reusable_iap.dart';
 
 class FakeBillingGateway implements BillingGateway {
   final StreamController<List<BillingPurchase>> _purchaseController =
@@ -156,7 +156,9 @@ void main() {
 
     expect(products, hasLength(3));
     expect(
-      products.firstWhere((product) => product.id == 'pro_monthly').isSubscription,
+      products
+          .firstWhere((product) => product.id == 'pro_monthly')
+          .isSubscription,
       isTrue,
     );
 

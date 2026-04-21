@@ -1,4 +1,4 @@
-import 'package:resuable_iap/src/iap_models.dart';
+import 'iap_models.dart';
 
 /// Catalog configuration for the reusable IAP service.
 class IapConfig {

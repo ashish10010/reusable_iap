@@ -1,41 +1,41 @@
-# resuable_iap
+# reusable_iap
 
-`resuable_iap` is a headless Flutter in-app purchase package built on top of [`in_app_purchase`](https://pub.dev/packages/in_app_purchase).
+`reusable_iap` is a headless Flutter in-app purchase service built on top of [`in_app_purchase`](https://pub.dev/packages/in_app_purchase).
 
-It focuses on the service layer, not UI. You bring your own paywall, buttons, branding, and state-management approach.
+It wraps store availability checks, product loading, purchase updates, restore flows, entitlement mapping, verification, and purchase completion without forcing a paywall UI or a state-management package.
 
-## What It Solves
+## Features
 
-- Headless `IapServiceApi` for store initialization, catalog loading, buying, restoring, and entitlement checks
+- Headless `IapServiceApi` for `initialize`, `loadProducts`, `buy`, `restore`, and entitlement checks
 - Support for consumables, non-consumables, and subscriptions
-- Normalized `IapProduct`, `IapPurchase`, `IapError`, and `IapState` models
-- Centralized purchase stream handling
-- Internal purchase completion / acknowledgement handling
-- Entitlement mapping through an app-provided resolver
-- Pluggable purchase verification hook
-- Testable architecture through the `BillingGateway` abstraction
+- Normalized `IapProduct`, `IapPurchase`, `IapState`, and `IapError` models
+- Centralized purchase lifecycle handling for pending, purchased, restored, canceled, and error states
+- Internal transaction completion / acknowledgement handling
+- App-defined entitlement mapping through `EntitlementResolver`
+- App-defined verification through `PurchaseVerifier`
+- Testable design through the `BillingGateway` abstraction
 
-## What It Does Not Do
+## What This Package Does Not Do
 
 - Render a paywall
-- Impose a design system
-- Depend on Provider, Bloc, Riverpod, or any other state-management package
-- Hardcode your entitlement model
-- Pretend local-only verification is correct for every app
+- Impose app branding or button styles
+- Depend on Provider, Bloc, Riverpod, or any other state-management library
+- Assume product IDs are the same thing as entitlements
+- Force one backend verification strategy
 
-## Install
-
-Add the package and configure your store products in App Store Connect / Play Console as usual.
+## Installation
 
 ```yaml
 dependencies:
-  resuable_iap: ^0.1.0
+  reusable_iap: ^0.1.0
 ```
+
+After adding the package, configure your products in App Store Connect / Google Play Console as usual.
 
 ## Quick Start
 
 ```dart
-import 'package:resuable_iap/resuable_iap.dart';
+import 'package:reusable_iap/reusable_iap.dart';
 
 final iap = IapService(
   config: IapConfig(
@@ -47,7 +47,7 @@ final iap = IapService(
     },
   ),
   verifyPurchase: (purchase) async {
-    // Call your backend here when you need server-side trust.
+    // Call your backend when you need server-side validation.
     return true;
   },
   entitlementResolver: (purchase) {
@@ -65,20 +65,28 @@ final iap = IapService(
 await iap.initialize();
 final products = await iap.loadProducts();
 
-iap.state.listen((state) {
+final subscription = iap.state.listen((state) {
   if (state.error != null) {
-    debugPrint(state.error!.message);
+    // Show a friendly error message.
   }
 
-  if (state.lastPurchase?.status == IapPurchaseStatus.purchased &&
-      iap.hasEntitlement('premium')) {
-    debugPrint('Premium unlocked');
+  if (iap.hasEntitlement('premium')) {
+    // Unlock premium features.
   }
 });
 
 await iap.buy(products.first.id);
 await iap.restore();
+
+await subscription.cancel();
+iap.dispose();
 ```
+
+## Product IDs vs Entitlements
+
+Product IDs are store-facing. Entitlements are app-facing.
+
+That means products like `pro_monthly`, `pro_yearly`, and `lifetime_unlock` can all unlock the same entitlement such as `premium`.
 
 ## Public API
 
@@ -95,47 +103,24 @@ abstract interface class IapServiceApi {
 }
 ```
 
-## Product Catalog
-
-`IapConfig` supports both the new explicit product-definition API and the older grouped-ID style:
-
-```dart
-final config = IapConfig(
-  consumableIds: {'coins_100'},
-  nonConsumableIds: {'lifetime_unlock'},
-  subscriptionIds: {'pro_monthly', 'pro_yearly'},
-);
-```
-
-Every loaded product is exposed as an `IapProduct`, so your app does not have to depend directly on plugin product models:
-
-- `id`
-- `title`
-- `description`
-- `price`
-- `type`
-- `isSubscription`
-- `currencyCode`
-- `rawPrice`
-
-## Entitlements
-
-Product IDs are store-facing. Entitlements are app-facing.
-
-For example, `pro_monthly`, `pro_yearly`, and `lifetime_unlock` can all map to the same entitlement like `premium`.
-
-## Verification
-
-`verifyPurchase` is intentionally app-owned. Some apps can accept local checks, while others should call a backend before granting access.
-
-If verification returns `false`, the service does not grant entitlements and does not acknowledge the purchase.
-
 ## Testing
 
-The service depends on `BillingGateway`, not directly on `InAppPurchase.instance`, so you can unit test store availability, query results, purchase success, cancellation, restore flows, and verification failures without talking to the real stores.
+The service depends on `BillingGateway`, not directly on `InAppPurchase.instance`, so you can unit test:
 
-## Important Publishing Notes
+- store available / unavailable
+- product catalog queries
+- successful purchases
+- canceled or failed purchases
+- restore flows
+- verification failures
 
-- Fill in a real `LICENSE` before publishing.
-- Add repository / issue tracker metadata in `pubspec.yaml` for a better pub.dev score.
-- Store configuration, backend receipt validation, and platform-specific setup are still required in the consuming app.
+## Example
+
+A minimal example app is included in `example/lib/main.dart`. Replace the sample product IDs with your own and run it on a configured iOS or Android device.
+
+## Publishing Notes
+
+- Add a real open-source license to `LICENSE` before publishing.
+- Add repository, issue tracker, and documentation URLs to `pubspec.yaml` when you have them.
+- Verify your store products, test accounts, and backend receipt validation in the consuming app.
+- Use the checklist in `PUBLISH_CHECKLIST.md` before running `flutter pub publish`.

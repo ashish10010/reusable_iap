@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:resuable_iap/src/iap_models.dart';
+
+import 'iap_models.dart';
 
 /// The aggregate state emitted by [IapServiceApi.state].
 class IapState extends Equatable {
@@ -43,7 +44,8 @@ class IapState extends Equatable {
       products: products ?? this.products,
       activeEntitlements: activeEntitlements ?? this.activeEntitlements,
       error: clearError ? null : (error ?? this.error),
-      lastPurchase: clearLastPurchase ? null : (lastPurchase ?? this.lastPurchase),
+      lastPurchase:
+          clearLastPurchase ? null : (lastPurchase ?? this.lastPurchase),
     );
   }
 

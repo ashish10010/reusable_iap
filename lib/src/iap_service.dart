@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:resuable_iap/src/billing_gateway.dart';
-import 'package:resuable_iap/src/flutter_billing_gateway.dart';
-import 'package:resuable_iap/src/iap_config.dart';
-import 'package:resuable_iap/src/iap_models.dart';
-import 'package:resuable_iap/src/iap_service_api.dart';
-import 'package:resuable_iap/src/iap_state.dart';
+import 'billing_gateway.dart';
+import 'flutter_billing_gateway.dart';
+import 'iap_config.dart';
+import 'iap_models.dart';
+import 'iap_service_api.dart';
+import 'iap_state.dart';
 
 Set<String> _emptyEntitlements(IapPurchase purchase) => const <String>{};
 

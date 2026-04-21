@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:resuable_iap/src/iap_models.dart';
+
+import 'iap_models.dart';
 
 /// Test seam around the underlying billing implementation.
 abstract interface class BillingGateway {
