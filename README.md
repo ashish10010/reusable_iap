@@ -118,9 +118,3 @@ The service depends on `BillingGateway`, not directly on `InAppPurchase.instance
 
 A minimal example app is included in `example/lib/main.dart`. Replace the sample product IDs with your own and run it on a configured iOS or Android device.
 
-## Publishing Notes
-
-- Add a real open-source license to `LICENSE` before publishing.
-- Add repository, issue tracker, and documentation URLs to `pubspec.yaml` when you have them.
-- Verify your store products, test accounts, and backend receipt validation in the consuming app.
-- Use the checklist in `PUBLISH_CHECKLIST.md` before running `flutter pub publish`.
